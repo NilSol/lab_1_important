@@ -1,8 +1,4 @@
 <!doctype html>
-<! -- 1) а)Стоимость материалов для изготовлния рубероида + б)стоимость работ + в)20% наценка предприятия по изготовлению рубероида(формула)
-а) - полимерная пленка($) - кровельный картон($) - битум(евро) - песок(грн)
-б) - зп(через клавиатуру) 1кв.м = зп/(22*8)/3
--->
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -15,30 +11,30 @@
 </head>
 <pre>
 <form action="" method="post">
-    <b>Введите количество полимерной пленки в доларах:</b>
-    <input type="number"   name="name1" min="1" max="9999" maxlength="4" oninput="this.value=this.value.slice(0,this.maxLength||1/1);this.value=(this.value   < 1) ? (1/1) : this.value;"/>
-    <b>Введите количество кровельного картона в доларах:</b>
-    <input type="number"  name="name2" min="1" max="9999" maxlength="4" oninput="this.value=this.value.slice(0,this.maxLength||1/1);this.value=(this.value   < 1) ? (1/1) : this.value;"/>
-    <b>Введите количество битума в евро:</b>
-    <input type="number" name="name3" min="1" max="9999" maxlength="4" oninput="this.value=this.value.slice(0,this.maxLength||1/1);this.value=(this.value   < 1) ? (1/1) : this.value;"/>
-    <b>Введите количество песка в грн:</b>
-    <input type="number"  name="name4" min="1" max="9999" maxlength="4" oninput="this.value=this.value.slice(0,this.maxLength||1/1);this.value=(this.value   < 1) ? (1/1) : this.value;"/>
+    <b>Введите количество полимерной пленки( цена в доларах):</b>
+    <input type="number"   name="name1"  required min="1" max="9999" maxlength="4" oninput="this.value=this.value.slice(0,this.maxLength||1/1);this.value=(this.value   < 1) ? (1/1) : this.value;"/>
+    <b>Введите количество кровельного картона(цена в доларах):</b>
+    <input type="number"  name="name2" required min="1" max="9999" maxlength="4" oninput="this.value=this.value.slice(0,this.maxLength||1/1);this.value=(this.value   < 1) ? (1/1) : this.value;"/>
+    <b>Введите количество битума(цена в евро):</b>
+    <input type="number" name="name3" required min="1" max="9999" maxlength="4" oninput="this.value=this.value.slice(0,this.maxLength||1/1);this.value=(this.value   < 1) ? (1/1) : this.value;"/>
+    <b>Введите количество песка(цена в грн):</b>
+    <input type="number"  name="name4" required min="1" max="9999" maxlength="4" oninput="this.value=this.value.slice(0,this.maxLength||1/1);this.value=(this.value   < 1) ? (1/1) : this.value;"/>
     <b>Введите зарплату работникам в грн:</b>
-    <input type="number"   name="salary" min="1" max="9999" maxlength="4" oninput="this.value=this.value.slice(0,this.maxLength||1/1);this.value=(this.value   < 1) ? (1/1) : this.value;"/>
+    <input type="number"   name="salary" required min="1" max="9999" maxlength="4" oninput="this.value=this.value.slice(0,this.maxLength||1/1);this.value=(this.value   < 1) ? (1/1) : this.value;"/>
+     <p> <input TYPE="submit" value ="посчитать" class="btn btn-outline-primary"></p>
 </form>
     <?php
     $json = file_get_contents('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json');
 
-    $courses = json_decode($json,true);// 27, 34
+    $courses = json_decode($json,true);//  это индексы доллара и евра 27, 34
     $dollar = $courses[27];
     $euro = $courses[34];
-    echo "Доллар= " . $dollar["rate"];
-    echo " ";
-    echo "Евро= " . $euro["rate"];
 
-
-$cost_of_mat = ($_POST('name1') * $dollar) + ($_POST('name2') * $dollar) + ($_POST('name3') * $euro) +  $_POST('name4');
-$cost_work = $_POST('salary')/(22*8)/3;
+$cost_of_mat = ($_POST['name1'] * $dollar["rate"]) + ($_POST['name2'] * $dollar["rate"]) + ($_POST['name3'] * $euro["rate"]) +  $_POST['name4']; // суммарная стоимость материалов
+$cost_work = $_POST['salary']/(22*8)/3; // стоимость работников
+    $markup = ($cost_work + $cost_of_mat) * 0.2; // наценка предриятия
+    $ruberoid = $cost_of_mat + $cost_work + $markup;
+    echo "Рубероид:" . $ruberoid;
 ?>
 </pre>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
