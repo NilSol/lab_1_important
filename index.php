@@ -25,17 +25,27 @@
 </form>
     <?php
     $json = file_get_contents('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json');
-
     $courses = json_decode($json,true);//  это индексы доллара и евра 27, 34
-    $dollar = $courses[27];
-    $euro = $courses[34];
-
-$cost_of_mat = ($_POST['name1'] * $dollar["rate"]) + ($_POST['name2'] * $dollar["rate"]) + ($_POST['name3'] * $euro["rate"]) +  $_POST['name4']; // суммарная стоимость материалов
-$cost_work = $_POST['salary']/(22*8)/3; // стоимость работников
+    for ($row = 0; $row < 61; $row++) {
+    foreach($courses[$row] as $key => $value) {
+        if($value == 840)
+        {
+            $a = $row;
+        }
+        if ($value == 978)
+        {
+            $b = $row;
+        }
+    }
+    }
+    $dollar = $courses[$a];
+    $euro = $courses[$b];
+    $cost_of_mat = ($_POST['name1'] * $dollar["rate"]) + ($_POST['name2'] * $dollar["rate"]) + ($_POST['name3'] * $euro["rate"]) +  $_POST['name4']; // суммарная стоимость материалов
+    $cost_work = $_POST['salary']/(22*8)/3; // стоимость работников
     $markup = ($cost_work + $cost_of_mat) * 0.2; // наценка предриятия
     $ruberoid = $cost_of_mat + $cost_work + $markup;
     echo "Рубероид:" . $ruberoid;
-?>
+    ?>
 </pre>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
