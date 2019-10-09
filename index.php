@@ -26,20 +26,19 @@
     <?php
     $json = file_get_contents('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json');
     $courses = json_decode($json,true);//  это индексы доллара и евра 27, 34
-    for ($row = 0; $row < 61; $row++) {
-    foreach($courses[$row] as $key => $value) {
-        if($value == 840)
+    $eur = $usd = 0;
+    foreach($courses as $cours) {
+        if($cours['r030'] == 840)
         {
-            $a = $row;
+            $usd = $cours['rate'];
         }
-        if ($value == 978)
+        if ($cours['r030'] == 978)
         {
-            $b = $row;
+            $eur = $cours['rate'];
         }
     }
-    }
-    $dollar = $courses[$a];
-    $euro = $courses[$b];
+    $dollar = $courses[$usd];
+    $euro = $courses[$eur];
     $cost_of_mat = ($_POST['name1'] * $dollar["rate"]) + ($_POST['name2'] * $dollar["rate"]) + ($_POST['name3'] * $euro["rate"]) +  $_POST['name4']; // суммарная стоимость материалов
     $cost_work = $_POST['salary']/(22*8)/3; // стоимость работников
     $markup = ($cost_work + $cost_of_mat) * 0.2; // наценка предриятия
