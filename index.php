@@ -37,9 +37,7 @@
             $eur = $cours['rate'];
         }
     }
-    $dollar = $courses[$usd];
-    $euro = $courses[$eur];
-    $cost_of_mat = ($_POST['name1'] * $dollar["rate"]) + ($_POST['name2'] * $dollar["rate"]) + ($_POST['name3'] * $euro["rate"]) +  $_POST['name4']; // суммарная стоимость материалов
+    $cost_of_mat = ($_POST['name1'] * $usd) + ($_POST['name2'] * $usd) + ($_POST['name3'] * $eur) +  $_POST['name4']; // суммарная стоимость материалов
     $cost_work = $_POST['salary']/(22*8)/3; // стоимость работников
     $markup = ($cost_work + $cost_of_mat) * 0.2; // наценка предриятия
     $ruberoid = $cost_of_mat + $cost_work + $markup;
