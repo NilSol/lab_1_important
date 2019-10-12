@@ -10,34 +10,23 @@
     <title>почем в Одессе рубероид</title>
 </head>
 <?php
-function value($cod, $courses)
+function dollar_or_euro($cod, $courses)
 {
-    if ($cod == 840)
         foreach ($courses as $cours)
         {
-            if ($cours['r030'] == 840)
-            {
-                {
+            if ($cours['r030'] == $cod)
                     {
                         $val = $cours['rate'];
                         return $val;
                     }
-                }
-            }
-        }
-    if ($cod == 978)
-        foreach ($courses as $cours)
-        {
-            if ($cours['r030'] == 978)
-            {
-                {
-                    {
+            if ($cours['r030'] == $cod)
+                  {
                         $val = $cours['rate'];
                         return $val;
-                    }
-                }
-            }
+                  }
         }
+
+
 }
   ?>
 <pre>
@@ -57,8 +46,8 @@ function value($cod, $courses)
     <?php
   $json = file_get_contents('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?date=20191010&json');
     $courses = json_decode($json,true);
-    $usd = value(840, $courses );
-    $euro = value(978, $courses);
+    $usd = dollar_or_euro(840, $courses );
+    $euro = dollar_or_euro(978, $courses);
     $cost_of_mat = ($_POST['name1'] * $usd) + ($_POST['name2'] * $usd) + ($_POST['name3'] * $euro) +  $_POST['name4']; // суммарная стоимость материалов
     $cost_work = $_POST['salary']/(22*8)/3; // стоимость работников
     $markup = ($cost_work + $cost_of_mat) * 0.2; // наценка предриятия
